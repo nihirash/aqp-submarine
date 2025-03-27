@@ -1,3 +1,24 @@
+draw_ui:
+    call console_clear
+    ld hl, banner
+    call console_printz
+    
+    ld a, $47
+    ld l, 0
+    call console_set_line
+
+    ld a, $3f
+    ld l, 1
+    call console_set_line
+
+    ld de, $0203
+    jp console_gotoxy
+    
+banner:
+    db "Submarine - The Deep Internet Browser for Aquarius+ (c) 2025 Aleksandr Sharikhin"
+    db "URL: "
+    db 0
+
 ; HL pointer to gopher-line
 print_gopher:
     ld b, 70
@@ -6,7 +27,7 @@ print_gopher:
 .loop:
     ld a, (hl)
     and a
-    jr z, .end
+    jp z, console_newline
     
     cp 9        ; Tabulation
     jr z, .look_for_end
@@ -29,17 +50,20 @@ print_gopher:
     ld a, (hl)
     and a
     jp z, console_newline
+    
+    inc hl
 
     cp 13
-    jr nz, .continue
-    inc hl
-    ld a, (hl)
+    jr z, .check
+
     cp 10
-    inc hl
     jp z, console_newline
-    dec hl
-.end:
-    jp console_newline
-.continue:
+
     inc hl
     jr .look_for_end
+.check:
+    ld a, (hl)
+    cp 10
+    jp nz, console_newline
+    inc hl
+    jp console_newline

@@ -84,7 +84,7 @@ console_set_line:
     add  hl, bc ; * 80
     ld bc, TEXT_BASE
     add  hl, bc
-    
+console_set_line_precalc:    
     ex af, af'
     ld a, ATTRS_MODE
     out (IO_VCTRL), a
