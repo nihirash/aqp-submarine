@@ -22,29 +22,19 @@ main:
     call console_init
     call esp_init
 
-    call draw_ui
-
-    ld hl, test2
-    ld de, request
-    call load_buffer
-
-    call render_page
-    jr $
-
-fp:
-    db 0
+    ld hl, homepage
+    jp gopher_page_navigate
 
     include "basic.inc"
+    include "regs.inc"
     include "aqplus.asm"
     include "console/index.asm"
     include "page/gopher-page.asm"
     include "transport.asm"
+    include "input.asm"
     include "esp.inc"
 
-request:
-    db "/",0
-
-test2:
-    db "tcp://i-logout.cz:70", 0
+homepage:
+    db "i",9,"/",9,"nihirash.net",9,"70",13    
 
 page_buffer:

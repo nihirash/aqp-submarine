@@ -2,7 +2,13 @@ draw_ui:
     call console_clear
     ld hl, banner
     call console_printz
-    
+
+    ld hl, path
+    call console_printz
+
+    ld hl, req_buffer
+    call console_printz
+
     ld a, $47
     ld l, 0
     call console_set_line
@@ -10,9 +16,7 @@ draw_ui:
     ld a, $3f
     ld l, 1
     call console_set_line
-
-    ld de, $0203
-    jp console_gotoxy
+    ret
     
 banner:
     db "Submarine - The Deep Internet Browser for Aquarius+ (c) 2025 Aleksandr Sharikhin"
