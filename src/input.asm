@@ -37,28 +37,7 @@ clean_line_editor:
     xor a
     ld (line_buffer), a
 line_editor:
-    push hl
-    ld l, 10
-    ld a, ' '
-    call console_fill_line
-
-    ld l, 12
-    call console_fill_line
-
-    ld l, 10
-    ld a, $74
-    call console_set_line_color
-    ld l, 11
-    ld a, $75
-    call console_set_line_color
-    ld l, 12
-    ld a, $74
-    call console_set_line_color
-    
-    ld de, $0a05
-    call console_gotoxy
-    pop hl
-    call print_line
+    call show_box
 .render_str:
     ld l, 11
     ld a, ' '
@@ -71,7 +50,7 @@ line_editor:
     call console_putc
 
     ld hl, line_buffer
-    call print_line
+    call print_line_t
     ld (.ptr), hl
     ld a, CURSOR_CHARACTER
     call console_putc
@@ -109,7 +88,7 @@ line_editor:
     dw 0
 
 line_buffer: 
-    ds 70
+    ds HOST_SIZE
 
 _keyval: 
     db 0

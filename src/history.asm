@@ -1,0 +1,3 @@
+HISTORY_DEPTH   equ 5
+HOST_SIZE       equ 70
+REQUEST_BUFFER  equ 255

@@ -7,7 +7,7 @@ draw_ui:
     call console_printz
 
     ld hl, req_buffer
-    call console_printz
+    call print_line_t
 
     ld a, $47
     ld l, 0
@@ -23,11 +23,14 @@ banner:
     db "URL: "
     db 0
 
-print_line:
+print_line_t:
     ld b, 70
 .loop:
     ld a, (hl)
     and a
+    ret z
+
+    cp 9
     ret z
 
     push hl
@@ -87,3 +90,35 @@ print_gopher:
     jp nz, console_newline
     inc hl
     jp console_newline
+
+show_box:
+    push hl
+    ld l, 10
+    ld a, ' '
+    call console_fill_line
+    
+    ld l, 11
+    ld a, ' '
+    call console_fill_line
+
+    ld l, 12
+    call console_fill_line
+
+    ld l, 10
+    ld a, $74
+    call console_set_line_color
+    ld l, 11
+    ld a, $75
+    call console_set_line_color
+    ld l, 12
+    ld a, $74
+    call console_set_line_color
+    
+    ld de, $0a05
+    call console_gotoxy
+    pop hl
+    call print_line_t
+
+    ld de, $0b02
+    call console_gotoxy
+    ret

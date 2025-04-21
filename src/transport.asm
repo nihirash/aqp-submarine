@@ -29,10 +29,17 @@ load_buffer:
     call esp_close 
     ret
 
-
 network_error:
-
+    ld hl, .header
+    call show_box
+    ld hl, .msg
+    call print_line_t
+    call inkey
     ret
+.header:
+    db "ERROR!", 0
+.msg:
+    db "Cannot establish network connection with host!", 0
 
 send_request:
     push de

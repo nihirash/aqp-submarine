@@ -29,6 +29,8 @@ main:
     include "regs.inc"
     include "aqplus.asm"
     include "console/index.asm"
+    include "history.asm"
+    include "page/navigate.asm"
     include "page/gopher-page.asm"
     include "page/url.asm"
     include "transport.asm"
