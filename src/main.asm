@@ -22,17 +22,20 @@ main:
     call console_init
     call esp_init
 
-    ld hl, homepage
-    jp gopher_page_navigate
+    call draw_ui
+    call input_address
 
     include "basic.inc"
     include "regs.inc"
     include "aqplus.asm"
     include "console/index.asm"
     include "page/gopher-page.asm"
+    include "page/url.asm"
     include "transport.asm"
     include "input.asm"
     include "esp.inc"
+
+
 
 homepage:
     db "i",9,"/",9,"nihirash.net",9,"70",13    

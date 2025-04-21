@@ -11,17 +11,33 @@ draw_ui:
 
     ld a, $47
     ld l, 0
-    call console_set_line
+    call console_set_line_color
 
     ld a, $3f
     ld l, 1
-    call console_set_line
+    call console_set_line_color
     ret
     
 banner:
     db "Submarine - The Deep Internet Browser for Aquarius+ (c) 2025 Aleksandr Sharikhin"
     db "URL: "
     db 0
+
+print_line:
+    ld b, 70
+.loop:
+    ld a, (hl)
+    and a
+    ret z
+
+    push hl
+    push bc
+    call console_putc
+    pop bc
+    pop hl
+    inc hl
+    djnz .loop
+    ret
 
 ; HL pointer to gopher-line
 print_gopher:

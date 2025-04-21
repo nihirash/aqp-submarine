@@ -71,7 +71,7 @@ console_gotoxy:
 
 ; A - attribute
 ; L - line
-console_set_line:
+console_set_line_color:
     ld h, 0
     add  hl, hl ; * 2
     add  hl, hl ; * 4
@@ -101,6 +101,31 @@ console_set_line_precalc:
     ld a, CHARS_MODE
     out (IO_VCTRL), a
 
+    ret
+
+; A - attribute
+; L - line
+console_fill_line:
+    ld h, 0
+    add  hl, hl ; * 2
+    add  hl, hl ; * 4
+    add  hl, hl ; * 8
+    add  hl, hl ; * 16
+    push hl
+    add  hl, hl ; * 32
+    add  hl, hl ; * 64
+    pop bc
+    add  hl, bc ; * 80
+    ld bc, TEXT_BASE
+    add  hl, bc
+
+    push hl
+    pop de
+    inc de
+
+    ld bc, 79
+    ld (hl), a
+    ldir
     ret
 
 console_putc:

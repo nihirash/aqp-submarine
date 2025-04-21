@@ -157,6 +157,9 @@ gopher_page_loop:
     cp KEY_RET
     jr z, gopher_navigate
 
+    cp 'u'
+    jp z, input_address
+
     jr gopher_page_loop
 
 gopher_cur_down:
@@ -239,6 +242,7 @@ gopher_navigate:
 gopher_page_navigate:
     call extract_row
     jr z, offset_changed
+gopher_page_make_request:
     ld hl, path
     ld de, req_buffer
     call load_buffer
@@ -355,6 +359,15 @@ init_vars:
     ld (cur_line), a
     ret
 
+input_address:
+    ld hl, page_addr_prompt
+    call clean_line_editor
+    ld hl, line_buffer
+    call parse_url
+    jp gopher_page_make_request
+page_addr_prompt:
+    db "Enter gopher address:", 0
+
 host_ptr:
     dw 0
 port_ptr:
@@ -377,7 +390,7 @@ cursor_ptr:
 path:
     db "tcp://"
 host_buffer:
-    ds 255
+    ds 70
 
 req_buffer:
     ds 255
