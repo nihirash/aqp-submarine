@@ -9,6 +9,9 @@ gopher_navigate:
     cp SEARCH_COL
     jr z, gopher_search_navigate
 
+    cp DOWNLOAD_COLOR
+    jp z, gopher_download_navigate
+
     jp offset_changed
 gopher_search_navigate:
     call extract_row
@@ -152,6 +155,14 @@ is_valid_row:
 .not:
     xor a
     ret
+
+gopher_download_navigate:
+    call extract_row
+    call history_push
+    jp z, offset_changed
+    ld hl, path
+    ld de, req_buffer
+    jp download
 
 init_vars:
     xor a

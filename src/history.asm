@@ -90,3 +90,4 @@ host_buffer:
     ds HOST_SIZE
 req_buffer:
     ds REQUEST_BUFFER
+req_buffer_end:

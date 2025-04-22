@@ -58,6 +58,36 @@ network_error:
 .msg:
     db "Cannot establish network connection with host!", 0
 
+download:
+    call send_request
+    call extract_filename
+    call line_editor
+    ld c, FO_WRONLY
+    ld hl, line_buffer
+    call esp_open
+    or a
+    jp m, .error_open
+    ld (.fp), a
+.down:
+    ld a, (transport_socket)
+    ld hl, page_buffer
+    ld de, $200
+    call esp_read
+    jp m, .done
+
+    ld a, (.fp)
+    ld hl, page_buffer
+    call esp_write
+    jr .down
+.done:
+    call esp_closeall
+    jp history_back
+.fp:
+    db 0
+.error_open:
+    call esp_closeall
+    jp history_back
+
 send_request:
     push de
     ld c, FO_RDWR

@@ -77,3 +77,18 @@ parse_url:
     db "70",0
 .default_path:
     db "/", 0
+
+extract_filename:
+    ld hl, req_buffer_end
+    ld bc, REQUEST_BUFFER
+    ld a, '/'
+    cpdr
+    inc hl
+    inc hl
+    ld de, line_buffer
+.copy:
+    ld a, (hl)
+    ldi
+    and a 
+    ret z
+    jr .copy

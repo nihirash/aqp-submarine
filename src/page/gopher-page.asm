@@ -166,6 +166,9 @@ gopher_page_loop:
     cp KEY_LF
     jr z, gopher_cur_up_scroll
 
+    cp KEY_BACK
+    jp z, history_back
+
     cp 'u'
     jp z, input_address
 
@@ -234,14 +237,14 @@ gopher_cur_up:
     dec a
     ld (cursor_position), a
     call render_page_skip_loopup
-    jr gopher_page_loop
+    jp gopher_page_loop
 .scroll:
 gopher_cur_up_scroll:
     ld hl, (page_offset)
     
     ld a, l
     or h
-    jr z, gopher_page_loop
+    jp z, gopher_page_loop
 
     ld bc, PER_PAGE
     or a
