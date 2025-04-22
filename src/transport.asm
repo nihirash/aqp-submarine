@@ -6,11 +6,18 @@ load_buffer:
     ld hl, page_buffer
     ld (page_ptr), hl
 .down:
-    ld a, (transport_socket)
     ld hl, $ffff
     ld de, (page_ptr)
     or a
     sbc hl, de
+
+    ; Memory ends
+    ld a, l
+    or h
+    jp z, .memory_ends
+
+    ld a, (transport_socket)
+
     ex de, hl
     call esp_read
     jp m, .down_done
@@ -28,9 +35,19 @@ load_buffer:
     ld a, (transport_socket)
     call esp_close 
     ret
+.memory_ends:
+    ld hl, error_header
+    call show_box
+    ld hl, .msg
+    call print_line_t
+    call inkey
+
+    jr .down_done
+.msg:
+    db "Page buffer overflow! Possibly page will be truncated!", 0
 
 network_error:
-    ld hl, .header
+    ld hl, error_header
     call show_box
     ld hl, .msg
     call print_line_t
@@ -38,8 +55,6 @@ network_error:
     pop hl
     pop hl
     jp history_back
-.header:
-    db "ERROR!", 0
 .msg:
     db "Cannot establish network connection with host!", 0
 

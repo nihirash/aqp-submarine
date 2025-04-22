@@ -30,7 +30,7 @@ app_image_start:
     ds $38 - $
 ; RST $38
     jp int_handler
-    ds 8
+    ds 16
 main:
     ld sp, stack
     ld a, 1

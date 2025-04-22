@@ -122,3 +122,6 @@ show_box:
     ld de, $0b02
     call console_gotoxy
     ret
+
+error_header:
+    db "ERROR!", 0
