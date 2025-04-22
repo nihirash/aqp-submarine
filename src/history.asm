@@ -3,6 +3,7 @@ HISTORY_SECOND equ $c100
 HISTORY_ACTIVE equ $ff00
 HISTORY_END    equ $ffff
 
+;; Cleaning page with history
 history_init:
     di
     ld a, HISTORY_RAM_PAGE
@@ -20,6 +21,7 @@ history_init:
     ei
     ret
 
+;; Appending entry to history
 history_push:
     ld a, (history_depth)
     cp 64
@@ -47,6 +49,7 @@ history_push:
     or a
     ret
 
+;; Poping from stack
 history_back:
     ld a, (history_depth)
     and a 

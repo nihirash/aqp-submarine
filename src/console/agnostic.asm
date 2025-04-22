@@ -1,3 +1,4 @@
+;; Initing screen with basic UI 
 draw_ui:
     call console_clear
     ld hl, banner
@@ -23,6 +24,7 @@ banner:
     db "URL: "
     db 0
 
+;; Print line that ends with zero-byte or with tabulation
 print_line_t:
     ld b, 70
 .loop:
@@ -91,6 +93,7 @@ print_gopher:
     inc hl
     jp console_newline
 
+;; Show box for user input and/or message box 
 show_box:
     push hl
     ld l, 10

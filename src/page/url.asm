@@ -1,7 +1,8 @@
+;; Parses url from string into internal buffers 
+;;
 ;; HL - URL
 parse_url:
     ld de, host_buffer
-    ld b, 64
 .domain_loop:
     ld a, (hl)
     ld (de), a
@@ -16,9 +17,6 @@ parse_url:
     cp '/'
     jr z, .fill_default_port
     inc de
-
-    dec b
-    jr z, .on_error
     jr .domain_loop
 .copy_port:
     inc de
@@ -48,7 +46,7 @@ parse_url:
 .copy_path:
     xor a
     ld (de), a
-    
+
     ld de, req_buffer
 .copy_path_loop:
     ld a, (hl)
@@ -72,12 +70,8 @@ parse_url:
     ld hl, .default_path
     ldi
     ldi
+    xor a
     ret
-
-
-.on_error:
-    halt
-
 
 .default_port:
     db "70",0

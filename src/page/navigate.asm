@@ -1,3 +1,4 @@
+;; Trying navigate page
 gopher_navigate:
     ld hl, (cursor_ptr)
     call get_row_color

@@ -7,7 +7,7 @@ PLAINTEXT_COL  equ $30
 SEARCH_COL     equ $90
 OTHER_COL      equ $F0
 
-
+;; Looking for current viewport start address
 find_page_offset:
     ld hl, page_buffer
 
@@ -44,10 +44,12 @@ find_page_offset:
     ld hl, 0
     ret
 
+;; Fully rerenders page
 render_page:
     call draw_ui
     call find_page_offset
     ld (page_addr), hl
+;; Redraw current page without recalculation base address 
 render_page_skip_loopup:
     ld de, $0203
     call console_gotoxy
@@ -145,6 +147,7 @@ coloroize_line:
     pop hl
     ret
 
+;; Input loop for gopher page
 gopher_page_loop:
     call inkey
 
@@ -166,7 +169,13 @@ gopher_page_loop:
     cp 'u'
     jp z, input_address
 
+    cp 'U'
+    jp z, input_address
+
     cp 'b'
+    jp z, history_back
+
+    cp 'B'
     jp z, history_back
 
     jr gopher_page_loop

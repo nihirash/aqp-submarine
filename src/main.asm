@@ -11,7 +11,7 @@
     ld a, $c
     out (IO_SYSCTRL), a
     jp start
-
+;; For using all 64K as RAM moving actual application code into $4000 address
     org $4000
 start:
     ld a, BASE_RAM_PAGE
@@ -32,6 +32,7 @@ app_image_start:
     jp int_handler
     ds 16
 main:
+;; Initializing stack, interrupts and basic memory map
     ld sp, stack
     ld a, 1
     out (IO_IRQMASK), a
@@ -47,7 +48,10 @@ main:
     ;; All code before doesn't required after start
 stack:
 
-    call console_init
+;; ******************************************
+;; * Useful code of application starts here *
+;; ******************************************
+    call console_clear
     call history_init
 
     call draw_ui
@@ -64,9 +68,6 @@ stack:
     include "transport.asm"
     include "input.asm"
     include "esp.inc"
-
-homepage:
-    db "i",9,"/",9,"nihirash.net",9,"70",13    
 
 int_handler:
     push af

@@ -19,10 +19,6 @@ SET_VRAM macro
         pop af
         endm
 
-console_init:
-    call console_clear
-    ret
-
 ;; Clear entire screen
 console_clear:
     SET_VRAM
@@ -149,6 +145,7 @@ console_fill_line:
     SET_RAM
     ret
 
+;; print character on screen
 console_putc:
     cp 13
     jr z, console_newline
@@ -168,6 +165,7 @@ console_putc:
     ld (console_pointer), hl
     ret
 
+;; Print zero-byte finished string 
 console_printz:
     ld a, (hl)
     and a
