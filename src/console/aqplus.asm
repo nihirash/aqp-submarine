@@ -5,15 +5,28 @@ CHARS_MODE        equ     VCTRL_TEXT_EN | VCTRL_REMAP | VCTRL_TEXT_HIRES
 ATTRS_MODE        equ     VCTRL_TEXT_EN | VCTRL_REMAP | VCTRL_TEXT_HIRES | VCTRL_TEXT_PAGE
 TEXT_BASE         equ     $3000
 
-console_init:
-    ld a, CHARS_MODE
-    out (IO_VCTRL), a
-    call console_clear
+SET_RAM macro
+        push af
+        ld a, BASE_RAM_PAGE
+        out (IO_BANK0), a
+        pop af
+        endm
 
+SET_VRAM macro  
+        push af
+        ld a, BASE_RAM_PAGE + BANK_OVERLAY
+        out (IO_BANK0), a
+        pop af
+        endm
+
+console_init:
+    call console_clear
     ret
 
 ;; Clear entire screen
 console_clear:
+    SET_VRAM
+
     ld a, CHARS_MODE
     out (IO_VCTRL), a
 
@@ -31,7 +44,10 @@ console_clear:
     
     ld hl, TEXT_BASE
     ld (console_pointer), hl
+    xor a
+    ld (console_position), a
 
+    SET_RAM
     ret
 
 ;; Fill all overlay with specified byte
@@ -86,6 +102,8 @@ console_set_line_color:
     add  hl, bc
 console_set_line_precalc:    
     ex af, af'
+    SET_VRAM
+    
     ld a, ATTRS_MODE
     out (IO_VCTRL), a
     ex af, af'
@@ -101,6 +119,7 @@ console_set_line_precalc:
     ld a, CHARS_MODE
     out (IO_VCTRL), a
 
+    SET_RAM
     ret
 
 ; A - attribute
@@ -124,21 +143,29 @@ console_fill_line:
     inc de
 
     ld bc, 79
+    SET_VRAM
     ld (hl), a
     ldir
+    SET_RAM
     ret
 
 console_putc:
+    cp 13
+    jr z, console_newline
+    SET_VRAM
+
     ld hl, (console_pointer)
     ld (hl), a
     inc hl
-    ld (console_pointer), hl
+    
+    SET_RAM
 
     ld a, (console_position)
     inc a
     cp 80
     ret z
     ld (console_position), a
+    ld (console_pointer), hl
     ret
 
 console_printz:

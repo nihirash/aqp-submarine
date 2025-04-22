@@ -46,6 +46,9 @@ parse_url:
     ldi
     pop hl
 .copy_path:
+    xor a
+    ld (de), a
+    
     ld de, req_buffer
 .copy_path_loop:
     ld a, (hl)

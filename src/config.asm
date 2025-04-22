@@ -1,0 +1,5 @@
+BASE_RAM_PAGE    equ 40
+HISTORY_RAM_PAGE equ 45
+
+HOST_SIZE       equ 70
+REQUEST_BUFFER  equ $ff - HOST_SIZE

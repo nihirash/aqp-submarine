@@ -19,7 +19,7 @@ draw_ui:
     ret
     
 banner:
-    db "Submarine - The Deep Internet Browser for Aquarius+ (c) 2025 Aleksandr Sharikhin"
+    db "Submarine - The Deep Internet Browser for Aquarius+ (c) 2025 Aleksandr Sharikhin", 13
     db "URL: "
     db 0
 

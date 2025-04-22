@@ -157,8 +157,17 @@ gopher_page_loop:
     cp KEY_RET
     jp z, gopher_navigate
 
+    cp KEY_RT
+    jr z, gopher_cur_down_scroll
+
+    cp KEY_LF
+    jr z, gopher_cur_up_scroll
+
     cp 'u'
     jp z, input_address
+
+    cp 'b'
+    jp z, history_back
 
     jr gopher_page_loop
 
@@ -179,6 +188,7 @@ gopher_cur_down:
 
     jr gopher_page_loop
 .scroll
+gopher_cur_down_scroll
     ld hl, (page_offset)
     ld bc, PER_PAGE
     add hl, bc
@@ -217,6 +227,7 @@ gopher_cur_up:
     call render_page_skip_loopup
     jr gopher_page_loop
 .scroll:
+gopher_cur_up_scroll:
     ld hl, (page_offset)
     
     ld a, l
@@ -251,9 +262,3 @@ page_addr:
 cursor_ptr:
     dw 0
 
-path:
-    db "tcp://"
-host_buffer:
-    ds HOST_SIZE
-req_buffer:
-    ds REQUEST_BUFFER

@@ -35,7 +35,9 @@ network_error:
     ld hl, .msg
     call print_line_t
     call inkey
-    ret
+    pop hl
+    pop hl
+    jp history_back
 .header:
     db "ERROR!", 0
 .msg:

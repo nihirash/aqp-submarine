@@ -13,6 +13,7 @@ gopher_search_navigate:
     call extract_row
     jp z, offset_changed
     
+    ld hl, .msg
     call clean_line_editor
 
     ld hl, req_buffer
@@ -41,6 +42,7 @@ gopher_search_navigate:
 gopher_page_navigate:
     call extract_row
     jp z, offset_changed
+    call history_push
 gopher_page_make_request:
     ld hl, path
     ld de, req_buffer
@@ -163,6 +165,7 @@ input_address:
     call clean_line_editor
     ld hl, line_buffer
     call parse_url
+    call history_push
     jp gopher_page_make_request
 page_addr_prompt:
     db "Enter gopher address:", 0
