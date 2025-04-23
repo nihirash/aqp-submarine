@@ -92,3 +92,47 @@ extract_filename:
     and a 
     ret z
     jr .copy
+
+check_ext:
+    push hl
+    ld hl, line_buffer
+    xor a
+    ld bc, -1
+    cpir
+    ld de, 5
+    or a
+    sbc hl, de
+    pop de
+
+    ld a, (de)
+    cp (hl)
+    ret nz
+    inc hl
+    inc de
+
+    ld a, (de)
+    cp (hl)
+    ret nz
+    inc hl
+    inc de
+
+    ld a, (de)
+    cp (hl)
+    ret nz
+    inc hl
+    inc de
+
+    ld a, (de)
+    cp (hl)
+    ret nz
+    inc hl
+    inc de
+
+    ld a, (de)
+    cp (hl)
+    ret nz
+    ret 
+pt3Ext1 db ".pt3", 0
+pt3Ext2 db ".PT3", 0
+pt2Ext1 db ".pt2", 0
+pt2Ext2 db ".PT2", 0

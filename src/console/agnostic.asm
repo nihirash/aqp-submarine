@@ -44,6 +44,30 @@ print_line_t:
     djnz .loop
     ret
 
+;; Print line that ends with zero-byte or with tabulation
+print_line_pt:
+    ld b, 80
+.loop:
+    ld a, (hl)
+    and a
+    ret z
+    inc hl
+
+    cp 10
+    ret z
+
+    cp ' '
+    jr c, .loop
+
+    push hl
+    push bc
+    call console_putc
+    pop bc
+    pop hl
+    
+    djnz .loop
+    ret
+
 ; HL pointer to gopher-line
 print_gopher:
     ld b, 70
@@ -52,7 +76,7 @@ print_gopher:
 .loop:
     ld a, (hl)
     and a
-    jp z, console_newline
+    jp z, console_newline_o
     
     cp 9        ; Tabulation
     jr z, .look_for_end
@@ -74,7 +98,7 @@ print_gopher:
 .look_for_end:
     ld a, (hl)
     and a
-    jp z, console_newline
+    jp z, console_newline_o
     
     inc hl
 
@@ -82,16 +106,16 @@ print_gopher:
     jr z, .check
 
     cp 10
-    jp z, console_newline
+    jp z, console_newline_o
 
     inc hl
     jr .look_for_end
 .check:
     ld a, (hl)
     cp 10
-    jp nz, console_newline
+    jp nz, console_newline_o
     inc hl
-    jp console_newline
+    jp console_newline_o
 
 ;; Show box for user input and/or message box 
 show_box:

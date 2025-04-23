@@ -6,20 +6,17 @@ rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(su
 
 SRC := $(call rwildcard,src,*.asm *.inc)
 INCLUDES := $(call rwildcard,include,*.asm *.inc)
-MAIN_SOURCE := src/main.asm
+ASSETS := $(call rwildcard,assets,*.*)
+MAIN_SOURCE := main.asm
 
-ASM := zmac
-ASMFLAGS := --zmac --oo cim,lst -I include/ -n
-ASMOUT_DIR := zout/
-ASMOUT := $(ASMOUT_DIR)main.cim
+ASM := sjasmplus
+ASMFLAGS := --raw=../$(APPNAME)
 
 all: $(APPNAME)
 
-$(ASMOUT): $(SRC) $(INCLUDES)
-		$(ASM) $(ASMFLAGS) $(MAIN_SOURCE)
+$(APPNAME): $(SRC) $(INCLUDES) $(ASSETS)
+		(cd src && $(ASM) $(MAIN_SOURCE) $(ASMFLAGS))
 
-$(APPNAME): $(ASMOUT)
-		cp $(ASMOUT) $(APPNAME)
 
 clean:
 		rm -rf $(APPNAME) $(ASMOUT_DIR)

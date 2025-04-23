@@ -181,6 +181,12 @@ gopher_page_loop:
     cp 'B'
     jp z, history_back
 
+    cp 'h'
+    jp z, home
+
+    cp 'H'
+    jp z, home
+
     jr gopher_page_loop
 
 gopher_cur_down:

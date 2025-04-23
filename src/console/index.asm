@@ -1,2 +1,2 @@
-    include "src/console/aqplus.asm"
-    include "src/console/agnostic.asm"
+    include "console/aqplus.asm"
+    include "console/agnostic.asm"

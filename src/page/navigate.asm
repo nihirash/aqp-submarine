@@ -12,6 +12,9 @@ gopher_navigate:
     cp DOWNLOAD_COLOR
     jp z, gopher_download_navigate
 
+    cp PLAINTEXT_COL
+    jp z, gopher_text_navigate
+
     jp offset_changed
 gopher_search_navigate:
     call extract_row
@@ -35,17 +38,28 @@ gopher_search_navigate:
     ld a, (hl)
     ld (de), a
     and a
-    jr z, gopher_page_make_request
+    jr z, gopher_page_make_request_h
     inc hl
     inc de
     jr .copy
 
 .msg:
     db "User input: ", 0
+gopher_text_navigate:
+    call extract_row
+    jp z, offset_changed
+    call history_push
+    ld hl, path
+    ld de, req_buffer
+    call load_buffer
+    call init_vars
+    call render_text_page
+    jp plain_text_loop
 
 gopher_page_navigate:
     call extract_row
     jp z, offset_changed
+gopher_page_make_request_h:
     call history_push
 gopher_page_make_request:
     ld hl, path
@@ -160,8 +174,27 @@ gopher_download_navigate:
     call extract_row
     call history_push
     jp z, offset_changed
+    
     ld hl, path
     ld de, req_buffer
+    call extract_filename
+    
+    ld hl, pt3Ext1
+    call check_ext
+    jp z, track_play
+
+    ld hl, pt3Ext2
+    call check_ext
+    jp z, track_play
+
+    ld hl, pt2Ext1
+    call check_ext
+    jp z, track_play
+
+    ld hl, pt2Ext2
+    call check_ext
+    jp z, track_play
+
     jp download
 
 init_vars:

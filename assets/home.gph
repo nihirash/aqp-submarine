@@ -1,0 +1,27 @@
+iSubmarine - A Gopher Browser for your Aquarius+ computer!
+i
+iIt's free software made by Aleksandr Sharikhin aka Nihirash just for 
+ifun and enjoyment!
+i
+iControls:
+i - Cursor  - navigation on page
+i - 'Enter' - open link/download file
+i - 'b' or 'Backspace' - return on history back to single step
+i - 'h' - Home page(this page)
+i - 'u' - open URL(without scheme but can contain port and path)
+i
+iExample of supported URLS:
+i  * nihirash.net
+i  * nihirash.net:7000
+i  * nihirash.net/guest.cgi
+i  * nihirash.net:70/music.cgi
+i
+iSome places to start:
+1Nihirash's gopherhole	/	nihirash.net	70
+1I-logout.cz. Phlog aggregator and other stuff are here	/	i-logout.cz	70
+1Hacker News gate	/	hngopher.com	70
+1Reddit gate	/	gopherredit.com	70
+1Gopherpedia(Wikipedia gate)	/	gopherpedia.com	70
+1SDF Public Unix system	/	sdf.org	70
+i
+iStay safe and be happy!

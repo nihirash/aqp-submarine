@@ -176,7 +176,7 @@ console_printz:
     inc hl
     jr console_printz
 
-console_newline:
+console_newline_o:
     ld a, 83
     ex af, af'
     ld a, (console_position)
@@ -192,6 +192,26 @@ console_newline:
     add hl, de
     ld (console_pointer), hl
     ld a, 3
+    ld (console_position), a
+    pop hl
+    ret
+
+console_newline:
+    ld a, 80
+    ex af, af'
+    ld a, (console_position)
+    ld b, a
+    ex af, af'
+    sub b
+    push hl
+    
+    ld d, 0
+    ld e, a
+
+    ld hl, (console_pointer)
+    add hl, de
+    ld (console_pointer), hl
+    xor a
     ld (console_position), a
     pop hl
     ret

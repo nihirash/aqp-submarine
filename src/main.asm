@@ -1,5 +1,7 @@
     org $38E1
-    include "regs.inc"
+;;
+;; This part cosplays basic program
+;;
 
     ; Header and BASIC stub
     defb    $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00
@@ -12,7 +14,7 @@
     out (IO_SYSCTRL), a
     jp start
 ;; For using all 64K as RAM moving actual application code into $4000 address
-    org $4000
+    ds $4000 - $
 start:
     ld a, BASE_RAM_PAGE
     out (IO_BANK0), a
@@ -24,7 +26,7 @@ start:
     jp main
 
 app_image_start:
-    phase $0
+    DISP $0
 ; RST 0
     jr $
     ds $38 - $
@@ -54,20 +56,22 @@ stack:
     call console_clear
     call history_init
 
-    call draw_ui
-    jp input_address
+    jp home
 
     include "config.asm"
-    include "basic.inc"
-    include "regs.inc"
+    include "../include/basic.inc"
+    include "../include/regs.inc"
+    include "../include/esp.inc"
     include "console/index.asm"
     include "history.asm"
     include "page/navigate.asm"
     include "page/gopher-page.asm"
+    include "page/plain-text.asm"
+    include "page/track-player.asm"
     include "page/url.asm"
+    include "binary_processors/pt3.asm"
     include "transport.asm"
     include "input.asm"
-    include "esp.inc"
 
 int_handler:
     push af
@@ -77,6 +81,9 @@ int_handler:
     ei
     reti
 
+
+homepage:
+    incbin "../assets/home.gph"
 size:
 page_buffer:
-    dephase
+    ENT

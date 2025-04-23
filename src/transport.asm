@@ -1,7 +1,35 @@
+clean_buffer:
+    ; Clean up buffer
+    ld hl, page_buffer
+    ld de, page_buffer + 1
+    ld bc, $ffff - page_buffer - 1
+    xor a 
+    ld (hl), a
+    ldir
+    ret
+
+home:
+    call clean_buffer
+    
+    ld hl, homepage
+    ld de, page_buffer
+    ld bc, page_buffer - homepage
+    ldir
+
+    call init_vars
+    call render_page
+    jp gopher_page_loop
+
 ;; HL - host
 ;; DE - request
 load_buffer:
     call send_request
+    call clean_buffer
+
+    ld hl, msg_wait
+    call show_box
+    ld hl, .msg_process
+    call console_printz
 
     ld hl, page_buffer
     ld (page_ptr), hl
@@ -27,11 +55,6 @@ load_buffer:
     ld (page_ptr), hl
     jr .down
 .down_done:
-    ld hl, (page_ptr)
-    inc hl
-    xor a
-    ld (hl), a
-
     ld a, (transport_socket)
     call esp_close 
     ret
@@ -45,6 +68,10 @@ load_buffer:
     jr .down_done
 .msg:
     db "Page buffer overflow! Possibly page will be truncated!", 0
+.msg_process:
+    db "Fetching from network!", 0
+msg_wait:
+    db "Please wait!", 0
 
 network_error:
     ld hl, error_header
@@ -59,15 +86,25 @@ network_error:
     db "Cannot establish network connection with host!", 0
 
 download:
+    ld hl, path
+    ld de, req_buffer
     call send_request
-    call extract_filename
+
     call line_editor
-    ld c, FO_WRONLY
+
+    ld c, FO_WRONLY + FO_CREATE
     ld hl, line_buffer
     call esp_open
+    
     or a
     jp m, .error_open
     ld (.fp), a
+
+    ld hl, msg_wait
+    call show_box
+    ld hl, load_buffer.msg_process
+    call console_printz
+
 .down:
     ld a, (transport_socket)
     ld hl, page_buffer
@@ -86,7 +123,17 @@ download:
     db 0
 .error_open:
     call esp_closeall
+    ld hl, error_header
+    call show_box
+    ld hl, .create_err
+    call console_printz
+    xor a
+    ld (_keyval), a
+    call inkey
+
     jp history_back
+.create_err:
+    db "Cannot create output file!", 0
 
 send_request:
     push de
