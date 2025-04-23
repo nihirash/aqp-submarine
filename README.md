@@ -6,7 +6,7 @@ A Gopher browser designed for your Aquarius+ computer.
 
 ## Getting Started
 
-1. **Configure WiFi** on your Aquarius+ computer. *(The emulator comes with network support enabled by default.)*
+1. **Configure WiFi** on your Aquarius+ computer. *([The emulator](https://github.com/fvdhoef/aquarius-plus/releases/tag/V1.3) comes with network support enabled by default.)*
 
 2. **Download** the `submarine.aqx` file from the [releases page](https://github.com/nihirash/aqp-submarine/releases) and **copy** it to your SD card. You can place it in any directory, including the root of the file system.
 
